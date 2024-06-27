@@ -1,7 +1,15 @@
 import Sortable from "sortablejs";
 import { transformI18n } from "@/plugins/i18n";
 import { useEpThemeStoreHook } from "@/store/modules/epTheme";
-import { defineComponent, ref, computed, type PropType, nextTick } from "vue";
+import {
+  type PropType,
+  ref,
+  unref,
+  computed,
+  nextTick,
+  defineComponent,
+  getCurrentInstance
+} from "vue";
 import {
   delay,
   cloneDeep,
@@ -10,11 +18,11 @@ import {
   getKeyList
 } from "@pureadmin/utils";
 
-import DragIcon from "./svg/drag.svg?component";
-import ExpandIcon from "./svg/expand.svg?component";
-import RefreshIcon from "./svg/refresh.svg?component";
-import SettingIcon from "./svg/settings.svg?component";
-import CollapseIcon from "./svg/collapse.svg?component";
+import DragIcon from "@/assets/table-bar/drag.svg?component";
+import ExpandIcon from "@/assets/table-bar/expand.svg?component";
+import RefreshIcon from "@/assets/table-bar/refresh.svg?component";
+import SettingIcon from "@/assets/table-bar/settings.svg?component";
+import CollapseIcon from "@/assets/table-bar/collapse.svg?component";
 
 const props = {
   /** 头部最左边的标题 */
@@ -34,6 +42,10 @@ const props = {
   isExpandAll: {
     type: Boolean,
     default: true
+  },
+  tableKey: {
+    type: [String, Number] as PropType<string | number>,
+    default: "0"
   }
 };
 
@@ -46,6 +58,7 @@ export default defineComponent({
     const loading = ref(false);
     const checkAll = ref(true);
     const isIndeterminate = ref(false);
+    const instance = getCurrentInstance()!;
     const isExpandAll = ref(props.isExpandAll);
     const filterColumns = cloneDeep(props?.columns).filter(column =>
       isBoolean(column?.hide)
@@ -170,9 +183,9 @@ export default defineComponent({
     const rowDrop = (event: { preventDefault: () => void }) => {
       event.preventDefault();
       nextTick(() => {
-        const wrapper: HTMLElement = document.querySelector(
-          ".el-checkbox-group>div"
-        );
+        const wrapper: HTMLElement = (
+          instance?.proxy?.$refs[`GroupRef${unref(props.tableKey)}`] as any
+        ).$el.firstElementChild;
         Sortable.create(wrapper, {
           animation: 300,
           handle: ".drag-btn",
@@ -299,6 +312,7 @@ export default defineComponent({
                 <div class="pt-[6px] pl-[11px]">
                   <el-scrollbar max-height="36vh">
                     <el-checkbox-group
+                      ref={`GroupRef${unref(props.tableKey)}`}
                       modelValue={checkedColumns.value}
                       onChange={value => handleCheckedColumnsChange(value)}
                     >

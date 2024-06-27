@@ -1,7 +1,8 @@
 buttons:
+  pureAccountSettings: Account
   pureLoginOut: LoginOut
   pureLogin: Login
-  pureSystemSet: Open ProjectConfig
+  pureOpenSystemSet: Open System Configs
   pureReload: Reload
   pureCloseCurrentTab: Close CurrentTab
   pureCloseLeftTabs: Close LeftTabs
@@ -10,6 +11,56 @@ buttons:
   pureCloseAllTabs: Close AllTabs
   pureContentFullScreen: Content FullScreen
   pureContentExitFullScreen: Content ExitFullScreen
+  pureClickCollapse: Collapse
+  pureClickExpand: Expand
+  pureConfirm: Confirm
+  pureSwitch: Switch
+  pureClose: Close
+  pureBackTop: BackTop
+  pureOpenText: Open
+  pureCloseText: Close
+search:
+  pureTotal: Total
+  pureHistory: History
+  pureCollect: Collect
+  pureDragSort: （Drag Sort）
+  pureEmpty: Empty
+  purePlaceholder: Search Menu
+panel:
+  pureSystemSet: System Configs
+  pureCloseSystemSet: Close System Configs
+  pureClearCacheAndToLogin: Clear cache and return to login page
+  pureClearCache: Clear Cache
+  pureOverallStyle: Overall Style
+  pureOverallStyleLight: Light
+  pureOverallStyleLightTip: Set sail freshly and light up the comfortable work interface
+  pureOverallStyleDark: Dark
+  pureOverallStyleDarkTip: Moonlight Overture, indulge in the tranquility and elegance of the night
+  pureOverallStyleSystem: Auto
+  pureOverallStyleSystemTip: Synchronize time, the interface naturally responds to morning and dusk
+  pureThemeColor: Theme Color
+  pureLayoutModel: Layout Model
+  pureVerticalTip: The menu on the left is familiar and friendly
+  pureHorizontalTip: Top menu, concise overview
+  pureMixTip: Mixed menu, flexible
+  pureStretch: Stretch Page
+  pureStretchFixed: Fixed
+  pureStretchFixedTip: Compact pages make it easy to find the information you need
+  pureStretchCustom: Custom
+  pureStretchCustomTip: Minimum 1280, maximum 1600
+  pureTagsStyle: Tags Style
+  pureTagsStyleSmart: Smart
+  pureTagsStyleSmartTip: Smart tags add fun and brilliance
+  pureTagsStyleCard: Card
+  pureTagsStyleCardTip: Card tags for efficient browsing
+  pureTagsStyleChrome: Chrome
+  pureTagsStyleChromeTip: Chrome style is classic and elegant
+  pureInterfaceDisplay: Interface Display
+  pureGreyModel: Grey Model
+  pureWeakModel: Weak Model
+  pureHiddenTags: Hidden Tags
+  pureHiddenFooter: Hidden Footer
+  pureMultiTagsCache: MultiTags Cache
 menus:
   pureHome: Home
   pureLogin: Login
@@ -108,7 +159,7 @@ menus:
   pureTimeline: Time Line
   pureLineTree: LineTree
   pureList: List Page
-  pureListCard: Card List Page
+  pureCardList: Card List Page
   pureDebounce: Debounce & Throttle
   pureFormDesign: Form Design
   pureBarcode: Barcode
@@ -117,8 +168,6 @@ menus:
   pureSwiper: Swiper Plugin
   pureVirtualList: Virtual List
   purePdf: PDF Preview
-  pureWord: Word Preview
-  pureExcels: Excel Preview
   pureExcel: Export Excel
   pureInfiniteScroll: Table Infinite Scroll
   pureSensitive: Sensitive Filter
@@ -135,6 +184,12 @@ menus:
   pureChildMenuOverflow: Child Menu Overflow Show Tooltip Text
 status:
   pureLoad: Loading...
+  pureMessage: Message
+  pureNotify: Notify
+  pureTodo: Todo
+  pureNoMessage: No Message
+  pureNoNotify: No Notify
+  pureNoTodo: No Todo
 login:
   pureUsername: Username
   purePassword: Password
@@ -159,6 +214,7 @@ login:
   pureTip: After scanning the code, click "Confirm" to complete the login
   pureDefinite: Definite
   pureLoginSuccess: Login Success
+  pureLoginFail: Login Fail
   pureRegisterSuccess: Regist Success
   pureTickPrivacy: Please tick Privacy Policy
   pureReadAccept: I have read it carefully and accept
