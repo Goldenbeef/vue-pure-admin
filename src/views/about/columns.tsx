@@ -7,7 +7,7 @@ export function useColumns() {
       minWidth: 100,
       cellRenderer: () => {
         return (
-          <el-tag size="large" class="!text-base">
+          <el-tag size="large" class="text-base!">
             {version}
           </el-tag>
         );
@@ -18,7 +18,7 @@ export function useColumns() {
       minWidth: 120,
       cellRenderer: () => {
         return (
-          <el-tag size="large" class="!text-base">
+          <el-tag size="large" class="text-base!">
             {lastBuildTime}
           </el-tag>
         );
@@ -29,7 +29,7 @@ export function useColumns() {
       minWidth: 140,
       cellRenderer: () => {
         return (
-          <el-tag size="large" class="!text-base">
+          <el-tag size="large" class="text-base!">
             {engines.node}
           </el-tag>
         );
@@ -40,7 +40,7 @@ export function useColumns() {
       minWidth: 140,
       cellRenderer: () => {
         return (
-          <el-tag size="large" class="!text-base">
+          <el-tag size="large" class="text-base!">
             {engines.pnpm}
           </el-tag>
         );
@@ -82,10 +82,7 @@ export function useColumns() {
       className: "pure-version",
       cellRenderer: () => {
         return (
-          <a
-            href="https://yiming_chang.gitee.io/pure-admin-doc"
-            target="_blank"
-          >
+          <a href="https://pure-admin.cn/" target="_blank">
             <span style="color: var(--el-color-primary)">文档链接</span>
           </a>
         );
@@ -97,10 +94,7 @@ export function useColumns() {
       className: "pure-version",
       cellRenderer: () => {
         return (
-          <a
-            href="https://yiming_chang.gitee.io/vue-pure-admin"
-            target="_blank"
-          >
+          <a href="https://pure-admin.github.io/vue-pure-admin" target="_blank">
             <span style="color: var(--el-color-primary)">预览链接</span>
           </a>
         );

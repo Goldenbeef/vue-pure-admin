@@ -61,7 +61,7 @@ declare global {
 
   /**
    * 全局自定义环境变量的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#%E5%85%B7%E4%BD%93%E9%85%8D%E7%BD%AE}
+   * @see {@link https://pure-admin.cn/pages/config/#%E5%85%B7%E4%BD%93%E9%85%8D%E7%BD%AE}
    */
   interface ViteEnv {
     VITE_PORT: number;
@@ -75,11 +75,11 @@ declare global {
   /**
    *  继承 `@pureadmin/table` 的 `TableColumns` ，方便全局直接调用
    */
-  interface TableColumnList extends Array<TableColumns> {}
+  type TableColumnList = Array<TableColumns>;
 
   /**
    * 对应 `public/platform-config.json` 文件的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#platform-config-json}
+   * @see {@link https://pure-admin.cn/pages/config/#platform-config-json}
    */
   interface PlatformConfigs {
     Version?: string;
@@ -87,12 +87,13 @@ declare global {
     FixedHeader?: boolean;
     HiddenSideBar?: boolean;
     MultiTagsCache?: boolean;
+    MaxTagsLevel?: number;
     KeepAlive?: boolean;
     Locale?: string;
     Layout?: string;
     Theme?: string;
     DarkMode?: boolean;
-    OverallStyle?: string;
+    ThemeMode?: string;
     Grey?: boolean;
     Weak?: boolean;
     HideTabs?: boolean;
@@ -101,7 +102,9 @@ declare global {
     SidebarStatus?: boolean;
     EpThemeColor?: string;
     ShowLogo?: boolean;
-    ShowModel?: string;
+    Watermark?: boolean;
+    WatermarkText?: string;
+    TagsStyle?: string;
     MenuArrowIconNoTransition?: boolean;
     CachingAsyncRoutes?: boolean;
     TooltipEffect?: Effect;
@@ -119,7 +122,7 @@ declare global {
 
   /**
    * 与 `PlatformConfigs` 类型不同，这里是缓存到浏览器本地存储的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#platform-config-json}
+   * @see {@link https://pure-admin.cn/pages/config/#platform-config-json}
    */
   interface StorageConfigs {
     version?: string;
@@ -139,9 +142,11 @@ declare global {
     sidebarStatus?: boolean;
     epThemeColor?: string;
     themeColor?: string;
-    overallStyle?: string;
+    themeMode?: string;
     showLogo?: boolean;
-    showModel?: string;
+    watermark?: boolean;
+    watermarkText?: string;
+    tagsStyle?: string;
     menuSearchHistory?: number;
     mapConfigure?: {
       amapKey?: string;
@@ -168,7 +173,7 @@ declare global {
       sidebarStatus?: boolean;
       epThemeColor?: string;
       themeColor?: string;
-      overallStyle?: string;
+      themeMode?: string;
     };
     configure: {
       grey?: boolean;
@@ -176,7 +181,9 @@ declare global {
       hideTabs?: boolean;
       hideFooter?: boolean;
       showLogo?: boolean;
-      showModel?: string;
+      watermark?: boolean;
+      watermarkText?: string;
+      tagsStyle?: string;
       multiTagsCache?: boolean;
       stretch?: boolean | number;
     };

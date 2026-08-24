@@ -123,17 +123,34 @@ const permissionRouter = {
       }
     },
     {
-      path: "/permission/button/index",
-      name: "PermissionButton",
+      path: "/permission/button",
       meta: {
         title: "menus.purePermissionButton",
-        roles: ["admin", "common"],
-        auths: [
-          "permission:btn:add",
-          "permission:btn:edit",
-          "permission:btn:delete"
-        ]
-      }
+        roles: ["admin", "common"]
+      },
+      children: [
+        {
+          path: "/permission/button/router",
+          component: "permission/button/index",
+          name: "PermissionButtonRouter",
+          meta: {
+            title: "menus.purePermissionButtonRouter",
+            auths: [
+              "permission:btn:add",
+              "permission:btn:edit",
+              "permission:btn:delete"
+            ]
+          }
+        },
+        {
+          path: "/permission/button/login",
+          component: "permission/button/perms",
+          name: "PermissionButtonLogin",
+          meta: {
+            title: "menus.purePermissionButtonLogin"
+          }
+        }
+      ]
     }
   ]
 };
@@ -146,30 +163,6 @@ const frameRouter = {
     rank: frame
   },
   children: [
-    {
-      path: "/iframe/external",
-      meta: {
-        title: "menus.pureExternalDoc"
-      },
-      children: [
-        {
-          path: "/external",
-          name: "https://yiming_chang.gitee.io/pure-admin-doc",
-          meta: {
-            title: "menus.pureExternalLink",
-            roles: ["admin", "common"]
-          }
-        },
-        {
-          path: "/pureUtilsLink",
-          name: "https://pure-admin-utils.netlify.app/",
-          meta: {
-            title: "menus.pureUtilsLink",
-            roles: ["admin", "common"]
-          }
-        }
-      ]
-    },
     {
       path: "/iframe/embedded",
       meta: {
@@ -257,6 +250,30 @@ const frameRouter = {
           }
         }
       ]
+    },
+    {
+      path: "/iframe/external",
+      meta: {
+        title: "menus.pureExternalDoc"
+      },
+      children: [
+        {
+          path: "/external",
+          name: "https://pure-admin.cn/",
+          meta: {
+            title: "menus.pureExternalLink",
+            roles: ["admin", "common"]
+          }
+        },
+        {
+          path: "/pureUtilsLink",
+          name: "https://pure-admin-utils.netlify.app/",
+          meta: {
+            title: "menus.pureUtilsLink",
+            roles: ["admin", "common"]
+          }
+        }
+      ]
     }
   ]
 };
@@ -309,7 +326,8 @@ export default defineFakeRoute([
     method: "get",
     response: () => {
       return {
-        success: true,
+        code: 0,
+        message: "操作成功",
         data: [
           systemManagementRouter,
           systemMonitorRouter,

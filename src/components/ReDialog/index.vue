@@ -8,9 +8,14 @@ import {
 } from "./index";
 import { ref, computed } from "vue";
 import { isFunction } from "@pureadmin/utils";
-import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
-import ExitFullscreen from "@iconify-icons/ri/fullscreen-exit-fill";
+import Fullscreen from "~icons/ri/fullscreen-fill";
+import ExitFullscreen from "~icons/ri/fullscreen-exit-fill";
 
+defineOptions({
+  name: "ReDialog"
+});
+
+const sureBtnMap = ref({});
 const fullscreen = ref(false);
 
 const footerButtons = computed(() => {
@@ -37,11 +42,28 @@ const footerButtons = computed(() => {
             type: "primary",
             text: true,
             bg: true,
+            popconfirm: options?.popconfirm,
             btnClick: ({ dialog: { options, index } }) => {
-              const done = () =>
+              if (options?.sureBtnLoading) {
+                sureBtnMap.value[index] = Object.assign(
+                  {},
+                  sureBtnMap.value[index],
+                  {
+                    loading: true
+                  }
+                );
+              }
+              const closeLoading = () => {
+                if (options?.sureBtnLoading) {
+                  sureBtnMap.value[index].loading = false;
+                }
+              };
+              const done = () => {
+                closeLoading();
                 closeDialog(options, index, { command: "sure" });
+              };
               if (options?.beforeSure && isFunction(options?.beforeSure)) {
-                options.beforeSure(done, { options, index });
+                options.beforeSure(done, { options, index, closeLoading });
               } else {
                 done();
               }
@@ -57,7 +79,7 @@ const fullscreenClass = computed(() => {
     "el-dialog__close",
     "-translate-x-2",
     "cursor-pointer",
-    "hover:!text-[red]"
+    "hover:text-[red]!"
   ];
 });
 
@@ -101,10 +123,7 @@ function handleClose(
       v-if="options?.fullscreenIcon || options?.headerRenderer"
       #header="{ close, titleId, titleClass }"
     >
-      <div
-        v-if="options?.fullscreenIcon"
-        class="flex items-center justify-between"
-      >
+      <div v-if="options?.fullscreenIcon" class="flex-bc">
         <span :id="titleId" :class="titleClass">{{ options?.title }}</span>
         <i
           v-if="!options?.fullscreen"
@@ -149,19 +168,35 @@ function handleClose(
         <component :is="options?.footerRenderer({ options, index })" />
       </template>
       <span v-else>
-        <el-button
-          v-for="(btn, key) in footerButtons(options)"
-          :key="key"
-          v-bind="btn"
-          @click="
-            btn.btnClick({
-              dialog: { options, index },
-              button: { btn, index: key }
-            })
-          "
-        >
-          {{ btn?.label }}
-        </el-button>
+        <template v-for="(btn, key) in footerButtons(options)" :key="key">
+          <el-popconfirm
+            v-if="btn.popconfirm"
+            v-bind="btn.popconfirm"
+            @confirm="
+              btn.btnClick({
+                dialog: { options, index },
+                button: { btn, index: key }
+              })
+            "
+          >
+            <template #reference>
+              <el-button v-bind="btn">{{ btn?.label }}</el-button>
+            </template>
+          </el-popconfirm>
+          <el-button
+            v-else
+            v-bind="btn"
+            :loading="key === 1 && sureBtnMap[index]?.loading"
+            @click="
+              btn.btnClick({
+                dialog: { options, index },
+                button: { btn, index: key }
+              })
+            "
+          >
+            {{ btn?.label }}
+          </el-button>
+        </template>
       </span>
     </template>
   </el-dialog>

@@ -17,17 +17,19 @@ import {
   isIncludeAllChildren
 } from "@pureadmin/utils";
 import { getConfig } from "@/config";
-import type { menuType } from "@/layout/types";
 import { buildHierarchyTree } from "@/utils/tree";
 import { userKey, type DataInfo } from "@/utils/auth";
+import { type menuType, routerArrays } from "@/layout/types";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { usePermissionStoreHook } from "@/store/modules/permission";
-const IFrame = () => import("@/layout/frameView.vue");
+const IFrame = () => import("@/layout/frame.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 
 // 动态路由
 import { getAsyncRoutes } from "@/api/routes";
+
+const PAGE_NOT_FOUND_ROUTE_NAME = "PageNotFound" as const;
 
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo;
@@ -81,7 +83,7 @@ function isOneOfArray(a: Array<string>, b: Array<string>) {
     : true;
 }
 
-/** 从localStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
+/** 从localStorage里取出当前登录用户的角色roles，过滤无权限的菜单 */
 function filterNoPermissionTree(data: RouteComponent[]) {
   const currentRoles =
     storageLocal().getItem<DataInfo<number>>(userKey)?.roles ?? [];
@@ -139,14 +141,18 @@ function findRouteByPath(path: string, routes: RouteRecordRaw[]) {
   }
 }
 
+/** 动态路由注册完成后，再添加全屏404（页面不存在）页面，避免刷新动态路由页面时误跳转到404页面 */
 function addPathMatch() {
-  if (!router.hasRoute("pathMatch")) {
-    router.addRoute({
-      path: "/:pathMatch(.*)",
-      name: "pathMatch",
-      redirect: "/error/404"
-    });
-  }
+  if (router.hasRoute(PAGE_NOT_FOUND_ROUTE_NAME)) return;
+  router.addRoute({
+    path: "/:pathMatch(.*)*",
+    name: PAGE_NOT_FOUND_ROUTE_NAME,
+    component: () => import("@/views/error/404.vue"),
+    meta: {
+      title: "menus.purePageNotFound",
+      showLink: false
+    }
+  });
 }
 
 /** 处理动态路由（后端返回的路由） */
@@ -172,11 +178,21 @@ function handleAsyncRoutes(routeList) {
           const flattenRouters: any = router
             .getRoutes()
             .find(n => n.path === "/");
+          // 保持router.options.routes[0].children与path为"/"的children一致，防止数据不一致导致异常
+          flattenRouters.children = router.options.routes[0].children;
           router.addRoute(flattenRouters);
         }
       }
     );
     usePermissionStoreHook().handleWholeMenus(routeList);
+  }
+  if (!useMultiTagsStoreHook().getMultiTagsCache) {
+    useMultiTagsStoreHook().handleTags("equal", [
+      ...routerArrays,
+      ...usePermissionStoreHook().flatteningRoutes.filter(
+        v => v?.meta?.fixedTag
+      )
+    ]);
   }
   addPathMatch();
 }
@@ -194,18 +210,26 @@ function initRouter() {
       });
     } else {
       return new Promise(resolve => {
-        getAsyncRoutes().then(({ data }) => {
-          handleAsyncRoutes(cloneDeep(data));
-          storageLocal().setItem(key, data);
-          resolve(router);
+        getAsyncRoutes().then(({ code, data }) => {
+          if (code === 0) {
+            handleAsyncRoutes(cloneDeep(data));
+            storageLocal().setItem(key, data);
+            resolve(router);
+          } else {
+            resolve(router);
+          }
         });
       });
     }
   } else {
     return new Promise(resolve => {
-      getAsyncRoutes().then(({ data }) => {
-        handleAsyncRoutes(cloneDeep(data));
-        resolve(router);
+      getAsyncRoutes().then(({ code, data }) => {
+        if (code === 0) {
+          handleAsyncRoutes(cloneDeep(data));
+          resolve(router);
+        } else {
+          resolve(router);
+        }
       });
     });
   }
@@ -347,7 +371,7 @@ function getAuths(): Array<string> {
   return router.currentRoute.value.meta.auths as Array<string>;
 }
 
-/** 是否有按钮级别的权限 */
+/** 是否有按钮级别的权限（根据路由`meta`中的`auths`字段进行判断）*/
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
   /** 从当前路由的`meta`字段里获取按钮级别的所有自定义`code`值 */
@@ -359,9 +383,23 @@ function hasAuth(value: string | Array<string>): boolean {
   return isAuths ? true : false;
 }
 
+function handleTopMenu(route) {
+  if (route?.children && route.children.length > 1) {
+    if (route.redirect) {
+      return route.children.filter(cur => cur.path === route.redirect)[0];
+    } else {
+      return route.children[0];
+    }
+  } else {
+    return route;
+  }
+}
+
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
 function getTopMenu(tag = false): menuType {
-  const topMenu = usePermissionStoreHook().wholeMenus[0]?.children[0];
+  const topMenu = handleTopMenu(
+    usePermissionStoreHook().wholeMenus[0]?.children[0]
+  );
   tag && useMultiTagsStoreHook().handleTags("push", topMenu);
   return topMenu;
 }

@@ -16,14 +16,16 @@ import {
   // Export,
   // Keyboard,
   // Validator,
+  Custom,
   // 可选组件
   Icon,
   Column,
+  Grid,
+  Pager,
+  Select,
   // Colgroup,
-  // Grid,
   // Tooltip,
   // Toolbar,
-  // Pager,
   // Form,
   // FormItem,
   // FormGather,
@@ -34,7 +36,6 @@ import {
   // RadioButton,
   // Switch,
   // Input,
-  // Select,
   // Optgroup,
   // Option,
   // Textarea,
@@ -47,7 +48,7 @@ import {
 } from "vxe-table";
 
 // 全局默认参数
-VXETable.config({
+VXETable.setConfig({
   // i18n: (key, args) => {
   //   return unref(i18n.global.locale) === "zh"
   //     ? XEUtils.toFormatString(XEUtils.get(zh, key), args)
@@ -64,21 +65,23 @@ VXETable.config({
 
 export function useVxeTable(app: App) {
   // 表格功能
-  // app.use(Filter)
-  // .use(Edit)
-  // .use(Menu)
-  // .use(Export)
-  // .use(Keyboard)
-  // .use(Validator)
-  // 可选组件
   app
+    // .use(Filter)
+    // .use(Edit)
+    // .use(Menu)
+    // .use(Export)
+    // .use(Keyboard)
+    // .use(Validator)
+    .use(Custom)
+    // 可选组件
     .use(Icon)
     .use(Column)
+    .use(Grid)
+    .use(Pager)
+    .use(Select)
     // .use(Colgroup)
-    // .use(Grid)
     // .use(Tooltip)
     // .use(Toolbar)
-    // .use(Pager)
     // .use(Form)
     // .use(FormItem)
     // .use(FormGather)
@@ -89,7 +92,6 @@ export function useVxeTable(app: App) {
     // .use(RadioButton)
     // .use(Switch)
     // .use(Input)
-    // .use(Select)
     // .use(Optgroup)
     // .use(Option)
     // .use(Textarea)

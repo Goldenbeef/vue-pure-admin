@@ -1,12 +1,20 @@
 import { defineStore } from "pinia";
-import { store } from "@/store";
-import { routerArrays } from "@/layout/types";
-import { responsiveStorageNameSpace } from "@/config";
-import type { multiType, positionType } from "./types";
-import { isEqual, isBoolean, isUrl, storageLocal } from "@pureadmin/utils";
+import {
+  type multiType,
+  type positionType,
+  store,
+  isUrl,
+  isEqual,
+  isNumber,
+  isBoolean,
+  getConfig,
+  routerArrays,
+  storageLocal,
+  responsiveStorageNameSpace
+} from "../utils";
+import { usePermissionStoreHook } from "./permission";
 
-export const useMultiTagsStore = defineStore({
-  id: "pure-multiTags",
+export const useMultiTagsStore = defineStore("pure-multiTags", {
   state: () => ({
     // 存储标签页信息（路由信息）
     multiTags: storageLocal().getItem<StorageConfigs>(
@@ -15,7 +23,12 @@ export const useMultiTagsStore = defineStore({
       ? storageLocal().getItem<StorageConfigs>(
           `${responsiveStorageNameSpace()}tags`
         )
-      : [...routerArrays],
+      : ([
+          ...routerArrays,
+          ...usePermissionStoreHook().flatteningRoutes.filter(
+            v => v?.meta?.fixedTag
+          )
+        ] as any),
     multiTagsCache: storageLocal().getItem<StorageConfigs>(
       `${responsiveStorageNameSpace()}configure`
     )?.multiTagsCache
@@ -67,22 +80,15 @@ export const useMultiTagsStore = defineStore({
             if (isBoolean(tagVal?.meta?.showLink) && !tagVal?.meta?.showLink)
               return;
             const tagPath = tagVal.path;
-            // 判断tag是否已存在
             const tagHasExits = this.multiTags.some(tag => {
-              return tag.path === tagPath;
+              return (
+                tag.path === tagPath &&
+                isEqual(tag?.query, tagVal?.query) &&
+                isEqual(tag?.params, tagVal?.params)
+              );
             });
 
-            // 判断tag中的query键值是否相等
-            const tagQueryHasExits = this.multiTags.some(tag => {
-              return isEqual(tag?.query, tagVal?.query);
-            });
-
-            // 判断tag中的params键值是否相等
-            const tagParamsHasExits = this.multiTags.some(tag => {
-              return isEqual(tag?.params, tagVal?.params);
-            });
-
-            if (tagHasExits && tagQueryHasExits && tagParamsHasExits) return;
+            if (tagHasExits) return;
 
             // 动态路由可打开的最大数量
             const dynamicLevel = tagVal?.meta?.dynamicLevel ?? -1;
@@ -100,6 +106,14 @@ export const useMultiTagsStore = defineStore({
             }
             this.multiTags.push(value);
             this.tagsCache(this.multiTags);
+            if (
+              getConfig()?.MaxTagsLevel &&
+              isNumber(getConfig().MaxTagsLevel)
+            ) {
+              if (this.multiTags.length > getConfig().MaxTagsLevel) {
+                this.multiTags.splice(1, 1);
+              }
+            }
           }
           break;
         case "splice":

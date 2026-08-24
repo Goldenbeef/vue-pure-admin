@@ -5,14 +5,14 @@ import { responsiveStorageNameSpace } from "@/config";
 import { storageLocal, isObject } from "@pureadmin/utils";
 
 // element-plus国际化
-import enLocale from "element-plus/dist/locale/en.mjs";
-import zhLocale from "element-plus/dist/locale/zh-cn.mjs";
+import enLocale from "element-plus/es/locale/lang/en";
+import zhLocale from "element-plus/es/locale/lang/zh-cn";
 
 const siphonI18n = (function () {
   // 仅初始化一次国际化配置
-  let cache = Object.fromEntries(
+  const cache = Object.fromEntries(
     Object.entries(
-      import.meta.glob("../../locales/*.y(a)?ml", { eager: true })
+      import.meta.glob("../../locales/*.{yaml,yml}", { eager: true })
     ).map(([key, value]: any) => {
       const matched = key.match(/([A-Za-z0-9-_]+)\./i)[1];
       return [matched, value.default];
@@ -50,7 +50,7 @@ function getObjectKeys(obj) {
       if (obj[k] && isObject(obj[k])) {
         stack.push({ obj: obj[k], key: newKey });
       } else {
-        keys.add(newKey);
+        keys.add(key);
       }
     }
   }

@@ -1,12 +1,12 @@
 import { $t } from "@/plugins/i18n";
 import { mind } from "@/router/enums";
-const IFrame = () => import("@/layout/frameView.vue");
+const IFrame = () => import("@/layout/frame.vue");
 
 export default {
   path: "/mind-map",
   redirect: "/mind-map/index",
   meta: {
-    icon: "ri:mind-map",
+    icon: "ri/mind-map",
     title: $t("menus.pureMindMap"),
     rank: mind
   },

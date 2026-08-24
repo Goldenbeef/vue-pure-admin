@@ -10,11 +10,9 @@
 
 `vue-pure-admin` is an open source, free and out-of-the-box middle and backend management system template. Completely adopts `ECMAScript` module (`ESM`) specifications to write and organize code, using the latest `Vue3`, `Vite`, `Element-Plus`, `TypeScript`, `Pinia`, `Tailwindcss` and other mainstream technologies develop
 
-## Sponsors
+## R&D philosophy
 
-<a class="logo" href="https://ai-tools.cn/resume/start" target="_blank" rel="sponsored noopener">
-  <img src="./public/sponsors/aitools.svg" alt="aitools">
-</a>
+Seek innovation in stability and see the future in technology
 
 ## Thin version (offering non-internationalized and internationalized versions)
 
@@ -30,12 +28,12 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Nanny-level documents
 
-[Click me to view vue-pure-admin documentation](https://yiming_chang.gitee.io/pure-admin-doc)  
+[Click me to view vue-pure-admin documentation](https://pure-admin.cn/)  
 [Click me to view @pureadmin/utils documentation](https://pure-admin-utils.netlify.app)
 
-## Quality service, software outsourcing, sponsorship support
+## Premium service
 
-[Click me for details](https://yiming_chang.gitee.io/pure-admin-doc/pages/service/)
+[Click me for details](https://pure-admin.cn/pages/service/)
 
 ## Tauri
 
@@ -47,7 +45,7 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Preview
 
-[preview station](https://yiming_chang.gitee.io/vue-pure-admin)
+[preview station](https://pure-admin.github.io/vue-pure-admin)
 
 `PC`
 
@@ -176,13 +174,17 @@ Thank you very much for your in-depth understanding of the source code and your 
 
 |                 **Contributor**                 |                                 **SpecificCode**                                 |
 | :---------------------------------------------: | :------------------------------------------------------------------------------: |
-|       [hb0730](https://github.com/hb0730)       |    [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=hb0730)    |
-|         [o-cc](https://github.com/o-cc)         |     [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=o-cc)     |
-| [yj-liuzepeng](https://github.com/yj-liuzepeng) | [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=yj-liuzepeng) |
-|   [skyline523](https://github.com/skyline523)   |  [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=skyline523)  |
-| [shark-lajiao](https://github.com/shark-lajiao) | [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=shark-lajiao) |
-|      [WitMiao](https://github.com/WitMiao)      |   [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=WitMiao)    |
-|     [QFifteen](https://github.com/QFifteen)     |   [代码](https://github.com/pure-admin/vue-pure-admin/commits?author=QFifteen)   |
+|       [hb0730](https://github.com/hb0730)       |    [code](https://github.com/pure-admin/vue-pure-admin/commits?author=hb0730)    |
+|         [o-cc](https://github.com/o-cc)         |     [code](https://github.com/pure-admin/vue-pure-admin/commits?author=o-cc)     |
+| [yj-liuzepeng](https://github.com/yj-liuzepeng) | [code](https://github.com/pure-admin/vue-pure-admin/commits?author=yj-liuzepeng) |
+|   [skyline523](https://github.com/skyline523)   |  [code](https://github.com/pure-admin/vue-pure-admin/commits?author=skyline523)  |
+| [shark-lajiao](https://github.com/shark-lajiao) | [code](https://github.com/pure-admin/vue-pure-admin/commits?author=shark-lajiao) |
+|      [WitMiao](https://github.com/WitMiao)      |   [code](https://github.com/pure-admin/vue-pure-admin/commits?author=WitMiao)    |
+|     [QFifteen](https://github.com/QFifteen)     |   [code](https://github.com/pure-admin/vue-pure-admin/commits?author=QFifteen)   |
+|      [edgexie](https://github.com/edgexie)      |   [code](https://github.com/pure-admin/vue-pure-admin/commits?author=edgexie)    |
+|       [way-jm](https://github.com/way-jm)       |    [code](https://github.com/pure-admin/vue-pure-admin/commits?author=way-jm)    |
+|   [simple-hui](https://github.com/simple-hui)   |  [code](https://github.com/pure-admin/vue-pure-admin/commits?author=simple-hui)  |
+|   [tinysimple](https://github.com/tinysimple)   |  [code](https://github.com/pure-admin/vue-pure-admin/commits?author=tinysimple)  |
 
 ## Git Contribution submission specification
 

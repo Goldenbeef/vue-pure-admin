@@ -10,7 +10,8 @@ import type {
   PureHttpRequestConfig
 } from "./types.d";
 import { stringify } from "qs";
-import NProgress from "../progress";
+import { message } from "@/utils/message";
+import { $t, transformI18n } from "@/plugins/i18n";
 import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from "@/store/modules/user";
 
@@ -35,16 +36,16 @@ class PureHttp {
     this.httpInterceptorsResponse();
   }
 
-  /** token过期后，暂存待执行的请求 */
+  /** `token`过期后，暂存待执行的请求 */
   private static requests = [];
 
-  /** 防止重复刷新token */
+  /** 防止重复刷新`token` */
   private static isRefreshing = false;
 
   /** 初始化配置对象 */
   private static initConfig: PureHttpRequestConfig = {};
 
-  /** 保存当前Axios实例对象 */
+  /** 保存当前`Axios`实例对象 */
   private static axiosInstance: AxiosInstance = Axios.create(defaultConfig);
 
   /** 重连原始请求 */
@@ -61,8 +62,6 @@ class PureHttp {
   private httpInterceptorsRequest(): void {
     PureHttp.axiosInstance.interceptors.request.use(
       async (config: PureHttpRequestConfig): Promise<any> => {
-        // 开启进度条动画
-        NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof config.beforeRequestCallback === "function") {
           config.beforeRequestCallback(config);
@@ -72,9 +71,9 @@ class PureHttp {
           PureHttp.initConfig.beforeRequestCallback(config);
           return config;
         }
-        /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
+        /** 请求白名单，放置一些不需要`token`的接口（通过设置请求白名单，防止`token`过期后再请求造成的死循环问题） */
         const whiteList = ["/refresh-token", "/login"];
-        return whiteList.find(url => url === config.url)
+        return whiteList.some(url => config.url.endsWith(url))
           ? config
           : new Promise(resolve => {
               const data = getToken();
@@ -92,6 +91,13 @@ class PureHttp {
                         config.headers["Authorization"] = formatToken(token);
                         PureHttp.requests.forEach(cb => cb(token));
                         PureHttp.requests = [];
+                      })
+                      .catch(_err => {
+                        PureHttp.requests = [];
+                        useUserStoreHook().logOut();
+                        message(transformI18n($t("login.pureLoginExpired")), {
+                          type: "warning"
+                        });
                       })
                       .finally(() => {
                         PureHttp.isRefreshing = false;
@@ -121,8 +127,6 @@ class PureHttp {
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
         const $config = response.config;
-        // 关闭进度条动画
-        NProgress.done();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof $config.beforeResponseCallback === "function") {
           $config.beforeResponseCallback(response);
@@ -137,8 +141,6 @@ class PureHttp {
       (error: PureHttpError) => {
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
-        // 关闭进度条动画
-        NProgress.done();
         // 所有的响应异常 区分来源为取消请求/非取消请求
         return Promise.reject($error);
       }
@@ -172,22 +174,22 @@ class PureHttp {
     });
   }
 
-  /** 单独抽离的post工具函数 */
+  /** 单独抽离的`post`工具函数 */
   public post<T, P>(
     url: string,
-    params?: AxiosRequestConfig<T>,
+    params?: AxiosRequestConfig<P>,
     config?: PureHttpRequestConfig
-  ): Promise<P> {
-    return this.request<P>("post", url, params, config);
+  ): Promise<T> {
+    return this.request<T>("post", url, params, config);
   }
 
-  /** 单独抽离的get工具函数 */
+  /** 单独抽离的`get`工具函数 */
   public get<T, P>(
     url: string,
-    params?: AxiosRequestConfig<T>,
+    params?: AxiosRequestConfig<P>,
     config?: PureHttpRequestConfig
-  ): Promise<P> {
-    return this.request<P>("get", url, params, config);
+  ): Promise<T> {
+    return this.request<T>("get", url, params, config);
   }
 }
 

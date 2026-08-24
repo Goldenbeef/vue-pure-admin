@@ -5,10 +5,10 @@ import { transformI18n } from "@/plugins/i18n";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import Refresh from "@iconify-icons/ep/refresh";
-import AddFill from "@iconify-icons/ri/add-circle-line";
+import Delete from "~icons/ep/delete";
+import EditPen from "~icons/ep/edit-pen";
+import Refresh from "~icons/ep/refresh";
+import AddFill from "~icons/ri/add-circle-line";
 
 defineOptions({
   name: "SystemMenu"
@@ -27,6 +27,11 @@ const {
   handleDelete,
   handleSelectionChange
 } = useMenu();
+
+function onFullscreen() {
+  // 重置表格高度
+  tableRef.value.setAdaptive();
+}
 </script>
 
 <template>
@@ -35,20 +40,20 @@ const {
       ref="formRef"
       :inline="true"
       :model="form"
-      class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px] overflow-auto"
+      class="search-form bg-bg_color w-full pl-8 pt-3 overflow-auto"
     >
       <el-form-item label="菜单名称：" prop="title">
         <el-input
           v-model="form.title"
           placeholder="请输入菜单名称"
           clearable
-          class="!w-[180px]"
+          class="w-45!"
         />
       </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
-          :icon="useRenderIcon('ri:search-line')"
+          :icon="useRenderIcon('ri/search-line')"
           :loading="loading"
           @click="onSearch"
         >
@@ -61,11 +66,12 @@ const {
     </el-form>
 
     <PureTableBar
-      title="菜单管理（初版，持续完善中）"
+      title="菜单管理（仅演示，操作后不生效）"
       :columns="columns"
       :isExpandAll="false"
       :tableRef="tableRef?.getTableRef()"
       @refresh="onSearch"
+      @fullscreen="onFullscreen"
     >
       <template #buttons>
         <el-button
